@@ -85,6 +85,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <scm>
+        <connection>scm:git:https://github.com/wso2-extensions/esb-connector-zohopeople.git</connection>
+        <url>https://github.com/wso2-extensions/esb-connector-zohopeople.git</url>
+        <developerConnection>scm:git:https://github.com/wso2-extensions/esb-connector-zohopeople</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     <build>
         <plugins>
             <plugin>
