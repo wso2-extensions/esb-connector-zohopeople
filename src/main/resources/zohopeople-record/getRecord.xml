@@ -33,7 +33,7 @@
    			//Appending the mandatory parameters to the url
    			urlQuery += 'authtoken=' + encodeURIComponent(authToken) + '&';
    			urlQuery += 'recordId=' + encodeURIComponent(recordId) + '&';
-   			urlQuery = '/' + encodeURIComponent(formLinkName) + '/getRecordByID?' + urlQuery.substring(0, urlQuery.length-1);				      
+   			urlQuery = '/' + encodeURIComponent(formLinkName) + '/getRecordByID?' + urlQuery.toString().substring(0, urlQuery.toString().lastIndexOf("&"));
    	      mc.setProperty('uri.var.urlQuery', urlQuery);                                         
            ]]>
         </script>

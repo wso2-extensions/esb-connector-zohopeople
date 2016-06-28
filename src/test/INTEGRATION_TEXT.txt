@@ -11,11 +11,11 @@ Tested Platform:
 
  - Microsoft WINDOWS V-7
  - UBUNTU 13.04, Maven 3.x
- - WSO2 ESB 4.9.0
+ - WSO2 ESB 4.9.0, WSO2 ESB 5.0.0-BETA
  - Java 1.7
 
 STEPS:
- 1.  Download ESB 4.9.0 from official site.
+ 1.  Download ESB 5.0.0-BETA from official site. Extract the ESB and put "-XX:-UseSplitVerifier" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh.
 
  1. Extract the certificate from browser by navigating to "https://people.zoho.com/people/" and place the certificate file in following locations. 
 
@@ -46,7 +46,7 @@ STEPS:
 	
 	Note: Add the aforementioned message formatters and the message builders to the axis file, if they are not available by default.
  
- 3.Compress the ESB and copy the wso2esb-4.9.0.zip file in to location "{Connector_Home}/repository/".
+ 3.Compress the ESB and copy the wso2esb-5.0.0-BETA.zip file in to location "{Connector_Home}/repository/".
  
  4. Complete features of ZohoPeople API can be accessed via Zoho People Premium Edition account. Follow the below steps to create an account.
 
