@@ -52,7 +52,6 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
         esbRequestHeadersMap.put("Content-Type", "application/json");
 
         apiRequestHeadersMap.put("Content-Type", "application/x-www-form-urlencoded");
-
     }
 
     /**
@@ -91,7 +90,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Positive test case for createAttendance method with optional parameters.
      */
-    @Test(priority = 1, dependsOnMethods = {"testCreateAttendanceWithMandatoryParameters"}, description = "zohopeople {createAttendance} integration test with optional parameters.")
+    @Test(priority = 1, dependsOnMethods = {"testCreateAttendanceWithMandatoryParameters"},
+            description = "zohopeople {createAttendance} integration test with optional parameters.")
     public void testCreateAttendanceWithOptionalParameters() throws IOException, JSONException {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -123,7 +123,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Negative test case for createAttendance method.
      */
-    @Test(priority = 1, dependsOnMethods = {"testCreateAttendanceWithOptionalParameters"}, description = "zohopeople {createAttendance} integration test with negative Case.")
+    @Test(priority = 1, dependsOnMethods = {"testCreateAttendanceWithOptionalParameters"},
+            description = "zohopeople {createAttendance} integration test with negative Case.")
     public void testCreateAttendanceWithNegativeCase() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:createAttendance");
@@ -145,12 +146,13 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Positive test case for getLeaveTypes method with mandatory parameters.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateAttendanceWithNegativeCase"}, description = "ZohoPeople {getLeaveTypes} integration test with mandatory parameters")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateAttendanceWithNegativeCase"},
+            description = "ZohoPeople {getLeaveTypes} integration test with mandatory parameters")
     public void testGetLeaveTypesWithMandatoryParameters() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:getLeaveTypes");
         String apiEndPoint =
-                connectorProperties.getProperty("apiUrl") + "/people/api/leave/getLeaveTypes?authtoken="
+                connectorProperties.getProperty("apiUrl") + "/people/api/leave/getLeaveTypeDetails?authtoken="
                         + connectorProperties.getProperty("accessToken") + "&userId="
                         + connectorProperties.getProperty("employeeId");
 
@@ -175,12 +177,13 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Negative test case for getLeaveTypes method.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testGetLeaveTypesWithMandatoryParameters"}, description = "ZohoPeople {getLeaveTypes} integration test for negative case")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testGetLeaveTypesWithMandatoryParameters"},
+            description = "ZohoPeople {getLeaveTypes} integration test for negative case")
     public void testGetLeaveTypesNegativeCase() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:getLeaveTypes");
         String apiEndPoint =
-                connectorProperties.getProperty("apiUrl") + "/people/api/leave/getLeaveTypes?authtoken="
+                connectorProperties.getProperty("apiUrl") + "/people/api/leave/getLeaveTypeDetails?authtoken="
                         + connectorProperties.getProperty("accessToken") + "&userId=INVALID_USER_ID";
 
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
@@ -201,54 +204,51 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Positive test case for createLeave method with mandatory parameters.
      */
-    @Test(priority = 1, dependsOnMethods = {"testGetLeaveTypesNegativeCase"}, description = "zohopeople {createLeave} integration test with mandatory parameters")
+    @Test(priority = 1, dependsOnMethods = {"testGetLeaveTypesNegativeCase"},
+            description = "zohopeople {createLeave} integration test with mandatory parameters")
     public void testCreateLeaveWithMandatoryParameters() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:createLeave");
         RestResponse<JSONObject> esbRestResponse =
                 sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_createLeave_mandatory.json");
-        JSONArray esbOutArray = new JSONArray(esbRestResponse.getBody().getString("output"));
 
         String apiEndPoint =
                 connectorProperties.getProperty("apiUrl") + "/people/api/leave/records?authtoken="
                         + connectorProperties.getProperty("accessToken");
         RestResponse<JSONObject> apiRestResponse =
                 sendJsonRestRequest(apiEndPoint, "POST", apiRequestHeadersMap, "api_createLeave_mandatory.json");
-        JSONArray apiOutArray = new JSONArray(apiRestResponse.getBody().getString("output"));
 
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
-        Assert.assertEquals(apiOutArray.getJSONObject(0).getString("message"),
-                esbOutArray.getJSONObject(0).getString("message"));
+        Assert.assertEquals(apiRestResponse.getBody().getString("message"), esbRestResponse.getBody().getString("message"));
 
     }
 
     /**
      * Negative test case for createLeave method.
      */
-    @Test(priority = 1, dependsOnMethods = {"testCreateLeaveWithMandatoryParameters"}, description = "zohopeople {createLeave} integration test with negative Case.")
+    @Test(priority = 1, dependsOnMethods = {"testCreateLeaveWithMandatoryParameters"},
+            description = "zohopeople {createLeave} integration test with negative Case.")
     public void testCreateLeaveWithNegativeCase() throws IOException, JSONException {
 
         esbRequestHeadersMap.put("Action", "urn:createLeave");
         RestResponse<JSONObject> esbRestResponse =
                 sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_createLeave_negative.json");
-        JSONArray esbOutArray = new JSONArray(esbRestResponse.getBody().getString("output"));
 
         String apiEndPoint =
                 connectorProperties.getProperty("apiUrl") + "/people/api/leave/records?authtoken="
                         + connectorProperties.getProperty("accessToken");
         RestResponse<JSONObject> apiRestResponse =
                 sendJsonRestRequest(apiEndPoint, "POST", apiRequestHeadersMap, "api_createLeave_negative.json");
-        JSONArray apiOutArray = new JSONArray(apiRestResponse.getBody().getString("output"));
-
-        Assert.assertEquals(esbRestResponse.getBody().getString("output"), apiRestResponse.getBody().getString("output"));
-        Assert.assertEquals(esbOutArray.getJSONObject(0).getJSONArray("message").getJSONObject(0).getString("From"),
-                apiOutArray.getJSONObject(0).getJSONArray("message").getJSONObject(0).getString("From"));
+        Assert.assertEquals(esbRestResponse.getBody().getString("Response status"),
+                apiRestResponse.getBody().getString("Response status"));
+        Assert.assertEquals(esbRestResponse.getBody().getString("message"), apiRestResponse.getBody().getString("message"));
     }
 
     /**
      * Positive test case for createRecord method with mandatory parameters.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateLeaveWithNegativeCase"}, description = "ZohoPeople {createRecord} integration test with mandatory parameters")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateLeaveWithNegativeCase"},
+            description = "ZohoPeople {createRecord} integration test with mandatory parameters")
     public void testCreateRecordWithMandatoryParameters() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:createRecord");
@@ -261,7 +261,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
         // Creating a unique employee id and a employee email by appending the date string
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
         connectorProperties.put("emplyeeIdMandatory", "test_id_" + dateFormat.format(new Date()));
-        connectorProperties.put("emplyeeEmailMandatory", "test_email_" + dateFormat.format(new Date()).toString().replace(":", "") + "@gmail.com");
+        connectorProperties.put("emplyeeEmailMandatory", "test_email_"
+                + dateFormat.format(new Date()).toString().replace(":", "") + "@gmail.com");
         sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_createRecord_mandatory.json");
         String apiEndPointAfterESBCall =
                 connectorProperties.getProperty("apiUrl") + "/people/api/forms/EmployeeInactiveView/records?authtoken="
@@ -278,7 +279,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Negative test case for createRecord method.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateRecordWithMandatoryParameters"}, description = "ZohoPeople {createRecord} integration test negative case")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateRecordWithMandatoryParameters"},
+            description = "ZohoPeople {createRecord} integration test negative case")
     public void testCreateRecordNegativeCase() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:createRecord");
@@ -309,7 +311,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Positive test case for updateRecord method with mandatory parameters.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateRecordNegativeCase"}, description = "ZohoPeople {updateRecord} integration test with mandatory parameters")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testCreateRecordNegativeCase"},
+            description = "ZohoPeople {updateRecord} integration test with mandatory parameters")
     public void testUpdateRecordWithMandatoryParameters() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:updateRecord");
@@ -345,7 +348,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Negative test case for updateRecord method.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testUpdateRecordWithMandatoryParameters"}, description = "ZohoPeople {updateRecord} integration test negative case")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testUpdateRecordWithMandatoryParameters"},
+            description = "ZohoPeople {updateRecord} integration test negative case")
     public void testUpdateRecordNegativeCase() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:updateRecord");
@@ -377,7 +381,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Positive test case for getRecord method with mandatory parameters.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testUpdateRecordNegativeCase"}, description = "ZohoPeople {getRecord} integration test with mandatory parameters")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testUpdateRecordNegativeCase"},
+            description = "ZohoPeople {getRecord} integration test with mandatory parameters")
     public void testGetRecordWithMandatoryParameters() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:getRecord");
@@ -404,7 +409,8 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
     /**
      * Negative test case for getRecord method.
      */
-    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testGetRecordWithMandatoryParameters"}, description = "ZohoPeople {getRecord} integration test negative case")
+    @Test(groups = {"wso2.esb"}, dependsOnMethods = {"testGetRecordWithMandatoryParameters"},
+            description = "ZohoPeople {getRecord} integration test negative case")
     public void testGetRecordNegativeCase() throws Exception {
 
         esbRequestHeadersMap.put("Action", "urn:getRecord");
@@ -413,16 +419,13 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
                         + connectorProperties.getProperty("accessToken") + "&recordId="
                         + connectorProperties.getProperty("recordId");
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
-        JSONArray apiJsonArray = new JSONArray(apiRestResponse.getBody().getString("output"));
 
         RestResponse<JSONObject> esbRestResponse =
                 sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_getRecord_negative.json");
-        JSONArray esbJsonArray = new JSONArray(esbRestResponse.getBody().getString("output"));
 
-        Assert.assertEquals(esbJsonArray.getJSONObject(0).getString("message"),
-                apiJsonArray.getJSONObject(0).getString("message"));
-        Assert.assertEquals(esbJsonArray.getJSONObject(0).getString("errorcode"),
-                apiJsonArray.getJSONObject(0).getString("errorcode"));
+        Assert.assertEquals(apiRestResponse.getBody().getJSONObject("response").getString("message"),
+                esbRestResponse.getBody().getJSONObject("response").getString("message"));
+        Assert.assertEquals(apiRestResponse.getBody().getJSONObject("response").getJSONObject("errors").getString("message"),
+                esbRestResponse.getBody().getJSONObject("response").getJSONObject("errors").getString("message"));
     }
-
 }

@@ -21,22 +21,9 @@
                description="Employee Id, Employee MailId or Record Id of the Employee to fetch leaves from"/>
     <sequence>
         <property name="uri.var.userId" expression="$func:userId"/>
-        <payloadFactory media-type="json">
-            <format>
-                {
-                "authtoken": "$1",
-                "userId":"$2"
-                }
-            </format>
-            <args>
-                <arg expression="get-property('uri.var.authToken')"/>
-                <arg expression="get-property('uri.var.userId')"/>
-            </args>
-        </payloadFactory>
-        <property name="messageType" value="application/x-www-form-urlencoded" scope="axis2"/>
         <call>
             <endpoint>
-                <http method="post" uri-template="{uri.var.apiUrl}/people/api/leave/getLeaveTypes"/>
+                <http method="get" uri-template="{uri.var.apiUrl}/people/api/leave/getLeaveTypeDetails?authtoken={uri.var.authToken}&amp;userId={uri.var.userId}"/>
             </endpoint>
         </call>
         <!-- Removing custom headers -->
