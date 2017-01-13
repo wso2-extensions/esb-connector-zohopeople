@@ -253,7 +253,7 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
 
         esbRequestHeadersMap.put("Action", "urn:createRecord");
         String apiEndPointBeforeESBCall =
-                connectorProperties.getProperty("apiUrl") + "/people/api/forms/EmployeeInactiveView/records?authtoken="
+                connectorProperties.getProperty("apiUrl") + "/people/api/forms/P_EmployeeView/records?authtoken="
                         + connectorProperties.getProperty("accessToken");
         RestResponse<JSONObject> apiRestResponseBeforeEsbCall =
                 sendJsonRestRequest(apiEndPointBeforeESBCall, "GET", apiRequestHeadersMap);
@@ -265,11 +265,10 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
                 + dateFormat.format(new Date()).toString().replace(":", "") + "@gmail.com");
         sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_createRecord_mandatory.json");
         String apiEndPointAfterESBCall =
-                connectorProperties.getProperty("apiUrl") + "/people/api/forms/EmployeeInactiveView/records?authtoken="
+                connectorProperties.getProperty("apiUrl") + "/people/api/forms/P_EmployeeView/records?authtoken="
                         + connectorProperties.getProperty("accessToken");
         RestResponse<JSONObject> apiRestResponseAfterEsbCall =
                 sendJsonRestRequest(apiEndPointAfterESBCall, "GET", apiRequestHeadersMap);
-
         Assert.assertFalse(apiRestResponseBeforeEsbCall.getBody().toString()
                 .contains(connectorProperties.getProperty("emplyeeIdMandatory")));
         Assert.assertTrue(apiRestResponseAfterEsbCall.getBody().toString()
@@ -285,7 +284,7 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
 
         esbRequestHeadersMap.put("Action", "urn:createRecord");
         String apiEndPointBeforeESBCall =
-                connectorProperties.getProperty("apiUrl") + "/people/api/forms/EmployeeInactiveView/records?authtoken="
+                connectorProperties.getProperty("apiUrl") + "/people/api/forms/P_EmployeeView/records?authtoken="
                         + connectorProperties.getProperty("accessToken");
         RestResponse<JSONObject> apiRestResponseBeforeEsbCall =
                 sendJsonRestRequest(apiEndPointBeforeESBCall, "GET", apiRequestHeadersMap);
@@ -297,7 +296,7 @@ public class ZohopeopleConnectorIntegrationTest extends ConnectorIntegrationTest
 
         sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_createRecord_negative.json");
         String apiEndPointAfterESBCall =
-                connectorProperties.getProperty("apiUrl") + "/people/api/forms/EmployeeInactiveView/records?authtoken="
+                connectorProperties.getProperty("apiUrl") + "/people/api/forms/P_EmployeeView/records?authtoken="
                         + connectorProperties.getProperty("accessToken");
         RestResponse<JSONObject> apiRestResponseAfterEsbCall =
                 sendJsonRestRequest(apiEndPointAfterESBCall, "GET", apiRequestHeadersMap);
