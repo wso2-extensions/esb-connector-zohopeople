@@ -4,7 +4,7 @@
     "category": "Human Resource Management",
     "documentationUrl": "https://docs.wso2.com/display/ESBCONNECTORS/Zoho+People+Connector",
     "description": "The Zoho People connector allows you to access the Zoho People REST API through WSO2 ESB. Zoho People is a simple online HRIS tool designed to manage and access all your employee data.",
-    "status": "Active",
+    "status": "Inactive",
     "labels": [
         "connector"
     ],
